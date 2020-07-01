@@ -9,12 +9,16 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.commands.Drive;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.IntakeAndConvey;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -26,10 +30,13 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Drivetrain m_drivetrain = new Drivetrain();
+  private final Intake m_intake = new Intake();
+  private final Conveyor m_conveyor = new Conveyor();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   public static final XboxController driveController = new XboxController(0);
+  private final JoystickButton intakeAndConveyButton = new JoystickButton(driveController, Button.kA.value);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -47,6 +54,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    intakeAndConveyButton.whileHeld(new IntakeAndConvey(m_conveyor, m_intake));
   }
 
 
