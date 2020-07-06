@@ -8,20 +8,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.HatchGrabber;
 
-public class Drive extends CommandBase {
+public class SetGrabber extends CommandBase {
   /**
-   * Creates a new Drive.
+   * Creates a new SetGrabber.
    */
-  @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-  private final Drivetrain drivetrain; 
-
-  public Drive(Drivetrain m_drivetrain) {
+  private HatchGrabber m_grabber;
+  private boolean setter = false;
+  public SetGrabber(HatchGrabber grabber) {
+    m_grabber = grabber;
     // Use addRequirements() here to declare subsystem dependencies.
-    drivetrain = m_drivetrain;
-    addRequirements(m_drivetrain);
+    addRequirements(grabber);
   }
 
   // Called when the command is initially scheduled.
@@ -32,7 +31,15 @@ public class Drive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      drivetrain.arcadeDrive(RobotContainer.driveController.getRawAxis(1), RobotContainer.driveController.getRawAxis(4));
+    if(RobotContainer.driveController.getAButtonPressed()){
+      setter = !setter;
+    }
+
+    if(setter){
+      m_grabber.grabHatch();
+    } else{
+      m_grabber.releaseHatch();
+    }
   }
 
   // Called once the command ends or is interrupted.
